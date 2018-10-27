@@ -20,7 +20,7 @@
 			value="true" ${tarefa.finalizado? 'checked' : '' }/> <br />
 			Data de finalização: <br />
 			<input type="text" name="dataFinalizacao" value="<fmt:formatDate
-															  value="${tarefa.dataFinalizacao.time}"
+															  value="${tarefa.dataFinalizacao}"
 															  pattern="dd/MM/yyyy" />"/>
 			<br />
 			<input type="submit" value="Alterar"/>

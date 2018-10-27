@@ -152,8 +152,7 @@ public class JdbcTarefaDao {
 
 			String sql = "SELECT descricao, finalizado, dataFinalizacao"
 					+ " FROM  tarefas"
-					+ " WHERE id = ?"
-					+ " ORDER BY id ASC";
+					+ " WHERE id = ?;";
 
 			stmt = conn.prepareStatement(sql.toString());
 			
@@ -162,19 +161,17 @@ public class JdbcTarefaDao {
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				Tarefa task = new Tarefa();
-				
-				task.setId(rs.getLong(1));
-				task.setDescricao(rs.getString(2));
-				task.setFinalizado(rs.getBoolean(3));
-				if (task.isFinalizado()) {
-					task.setDataFinalizacao(new Date(rs.getTimestamp("dataFinalizacao").getTime()));
-				}	
+				tarefa.setId(id);
+				tarefa.setDescricao(rs.getString(1));
+				tarefa.setFinalizado(rs.getBoolean(2));
+				if (tarefa.isFinalizado()) {
+					tarefa.setDataFinalizacao(new Date(rs.getTimestamp("dataFinalizacao").getTime()));
+				}
 				
 			}
 
 		} catch (SQLException e) {
-			System.out.println("Erro no método listarTarefas");
+			System.out.println("Erro no método buscarTarefa");
 			e.printStackTrace();
 		} finally {
 			db.finalizaObjetos(rs, stmt, conn);
@@ -194,14 +191,15 @@ public class JdbcTarefaDao {
 
 			StringBuffer sql = new StringBuffer();
 			
-			sql.append("UPDATE aluno SET telefone = ?, nome = ?, data_nascimento = ?, sexo = ?, endereco = ?, email = ?, curso = ?, ativo = ? ");
-			sql.append("WHERE matricula = ?;");
+			sql.append("UPDATE tarefas SET descricao = ?, finalizado = ?, dataFinalizacao = ? ");
+			sql.append("WHERE id = ?;");
 
 			stmt = conn.prepareStatement(sql.toString());
 
 			stmt.setString(1, tarefa.getDescricao());
 			stmt.setBoolean(2, tarefa.isFinalizado());
 			stmt.setDate(3, d);
+			stmt.setLong(4, tarefa.getId());
 
 			stmt.execute();
 			conn.commit();
@@ -210,10 +208,10 @@ public class JdbcTarefaDao {
 				try {
 					conn.rollback();
 				} catch (SQLException e1) {
-					System.out.println("Erro no método editarAluno - rollback");
+					System.out.println("Erro no método alterarTarefa - rollback");
 				}
 			}
-			System.out.println("Erro no método editarAluno");
+			System.out.println("Erro no método alterarTarefa");
 			e.printStackTrace();
 		} finally {
 			db.finalizaObjetos(rs, stmt, conn);
