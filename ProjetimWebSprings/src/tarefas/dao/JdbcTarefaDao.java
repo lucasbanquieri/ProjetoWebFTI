@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.naming.NamingException;
 
-import tarefas.dao.BancoDados;
 import tarefas.model.Tarefa;
 
 public class JdbcTarefaDao {
@@ -212,6 +211,45 @@ public class JdbcTarefaDao {
 				}
 			}
 			System.out.println("Erro no método alterarTarefa");
+			e.printStackTrace();
+		} finally {
+			db.finalizaObjetos(rs, stmt, conn);
+		}
+	}
+	
+	public void finaliza(Long id) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			conn = db.obterConexao();
+			conn.setAutoCommit(false);
+			Date data = new Date();
+			java.sql.Date date = new java.sql.Date(data.getTime());
+
+			StringBuffer sql = new StringBuffer();
+			
+			sql.append("UPDATE tarefas SET finalizado = ?, dataFinalizacao = ? ");
+			sql.append("WHERE id = ?;");
+
+			stmt = conn.prepareStatement(sql.toString());
+
+			stmt.setBoolean(1, true);
+			stmt.setDate(2, date);
+			stmt.setLong(3, id);
+
+			stmt.execute();
+			conn.commit();
+		} catch (SQLException e) {
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException e1) {
+					System.out.println("Erro no método finaliza - rollback");
+				}
+			}
+			System.out.println("Erro no método finaliza");
 			e.printStackTrace();
 		} finally {
 			db.finalizaObjetos(rs, stmt, conn);

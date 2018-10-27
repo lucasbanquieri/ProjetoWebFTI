@@ -25,9 +25,15 @@
 				<td>${tarefa.id}</td>
 				<td>${tarefa.descricao}</td>
 				<c:if test="${tarefa.finalizado eq false}">
-				<td>Não finalizado</td>
-				</c:if><c:if test="${tarefa.finalizado eq true}">
-				<td>Finalizado</td>
+					<td id="tarefa_${tarefa.id}">
+						Não Finalizado - 
+						<a href="#" onClick="finalizaAgora(${tarefa.id})">
+						Finalizar Agora
+						</a>
+					</td>
+				</c:if>
+				<c:if test="${tarefa.finalizado eq true}">
+					<td>Finalizado</td>
 				</c:if>
 				<td>
 					<fmt:formatDate
@@ -42,5 +48,13 @@
 		</table>
 		<br/>
 		<button onclick='location.href="novaTarefa";'>Nova Tarefa</button>
+		<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+		<script type="text/javascript">
+			function finalizaAgora(id) {
+				$.post("finalizaTarefa", {'id' : id}, function() {
+					$("#tarefa_"+id).html("Finalizada");
+					});
+			}
+		</script>
 	</body>
 </html>
