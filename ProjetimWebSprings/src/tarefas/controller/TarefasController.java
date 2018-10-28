@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import tarefas.dao.JdbcTarefaDao;
 import tarefas.model.Tarefa;
@@ -70,6 +69,6 @@ public class TarefasController {
 		JdbcTarefaDao dao = new JdbcTarefaDao();
 		dao.finaliza(id);
 		model.addAttribute("tarefa", dao.buscaTarefa(id));
-		return "tarefa/dataFinalizada";
+		return "tarefas/finalizada";
 	}
 }

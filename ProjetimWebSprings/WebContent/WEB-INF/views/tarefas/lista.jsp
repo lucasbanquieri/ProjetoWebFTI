@@ -21,11 +21,11 @@
 		</thead>
 			<c:forEach items="${tarefas}" var="tarefa">
 			<tbody>
-			<tr>
+			<tr id="tarefa_${tarefa.id}">
 				<td>${tarefa.id}</td>
 				<td>${tarefa.descricao}</td>
 				<c:if test="${tarefa.finalizado eq false}">
-					<td id="tarefa_${tarefa.id}">
+					<td>
 						Não Finalizado - 
 						<a href="#" onClick="finalizaAgora(${tarefa.id})">
 						Finalizar Agora
@@ -51,8 +51,8 @@
 		<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 		<script type="text/javascript">
 			function finalizaAgora(id) {
-				$.post("finalizaTarefa", {'id' : id}, function() {
-					$("#tarefa_"+id).html("Finalizada");
+				$.post("finalizaTarefa", {'id' : id}, function(resposta) {
+					$("#tarefa_"+id).html(resposta);
 					});
 			}
 		</script>
